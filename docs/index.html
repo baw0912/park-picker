@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Park Picker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            padding: 30px 20px;
+            text-align: center;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .content {
+            padding: 30px 20px;
+        }
+
+        .picker-section {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .pick-button {
+            background: linear-gradient(135deg, #FF6B6B, #FF8E8E);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            border-radius: 50px;
+            font-size: 1.3em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .pick-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(255, 107, 107, 0.4);
+        }
+
+        .pick-button:active {
+            transform: translateY(-1px);
+        }
+
+        .result {
+            margin-top: 25px;
+            padding: 20px;
+            background: linear-gradient(135deg, #FFE066, #FF9A9E);
+            border-radius: 15px;
+            font-size: 1.4em;
+            font-weight: bold;
+            text-align: center;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 25px rgba(255, 224, 102, 0.3);
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.5s ease;
+        }
+
+        .result.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .parks-section {
+            margin-top: 40px;
+        }
+
+        .section-title {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            color: #333;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .park-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            margin-bottom: 12px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .park-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .park-item.disabled {
+            opacity: 0.5;
+            background: rgba(200, 200, 200, 0.6);
+        }
+
+        .park-item.disabled .park-name {
+            text-decoration: line-through;
+            color: #888;
+        }
+
+        .status-indicator {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #4CAF50;
+            transition: all 0.3s ease;
+        }
+
+        .park-item.disabled .status-indicator {
+            background: #f44336;
+        }
+
+        .park-name {
+            font-weight: 600;
+            color: #333;
+            flex: 1;
+            font-size: 1.1em;
+        }
+
+        .weight-input {
+            width: 80px;
+            padding: 8px 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .weight-input:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+        }
+
+        .stats {
+            margin-top: 25px;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 15px;
+            color: white;
+            text-align: center;
+        }
+
+        .stats h3 {
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .total-weight {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                margin: 0;
+                border-radius: 0;
+                min-height: 100vh;
+            }
+
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .pick-button {
+                padding: 15px 30px;
+                font-size: 1.1em;
+            }
+
+            .park-item {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+
+            .weight-input {
+                width: 100px;
+            }
+        }
+
+        .emoji {
+            margin-right: 8px;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏞️ Park Picker</h1>
+            <p>Discover your next adventure!</p>
+        </div>
+        
+        <div class="content">
+            <div class="picker-section">
+                <button class="pick-button" onclick="pickRandomPark()">
+                    🎲 Pick a Park!
+                </button>
+                <div class="result" id="result">
+                    Click the button to pick a park!
+                </div>
+            </div>
+
+            <div class="parks-section">
+                <h2 class="section-title">🏛️ Available Parks & Weights</h2>
+                <p style="text-align: center; margin-bottom: 20px; color: #666; font-style: italic;">
+                    💡 Click on a park to enable/disable it
+                </p>
+                <div id="parksList"></div>
+                
+                <div class="stats">
+                    <h3>📊 Total Weight (Enabled Parks Only)</h3>
+                    <div class="total-weight" id="totalWeight">0</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initial parks data with weights and enabled status
+        let parks = {
+            "Lost Valley": { weight: 10, enabled: true },
+            "Lewis and Clark": { weight: 10, enabled: true },
+            "Greensfelder": { weight: 10, enabled: true },
+            "Rockwoods Reservation": { weight: 10, enabled: true },
+            "Zombie": { weight: 10, enabled: true },
+            "Castlewood": { weight: 7, enabled: true },
+            "Broemmelsiek": { weight: 5, enabled: false },
+            "West Tyson": { weight: 3, enabled: false },
+            "Matson": { weight: 2, enabled: false },
+            "Busch Wildlife": { weight: 3, enabled: false },
+            "Cliff Cave": { weight: 1, enabled: false },
+            "Indian Camp Creek": { weight: 1, enabled: false },
+            "Bootlegger": { weight: 5, enabled: false },
+            "Klondike": { weight: 3, enabled: false },
+            "Cuivre River": { weight: 10, enabled: false },
+            "Hawn": { weight: 10, enabled: false },
+            "Don Robinson": { weight: 10, enabled: false }
+        };
+
+        // Park emojis for visual appeal
+        const parkEmojis = ["🌲", "🏔️", "🌳", "🌺", "🦌", "🌸", "🍃", "🌻", "🏞️", "🌿", "🍀", "🌾"];
+
+        function renderParksList() {
+            const container = document.getElementById('parksList');
+            container.innerHTML = '';
+            
+            Object.keys(parks).forEach((park, index) => {
+                const parkData = parks[park];
+                const div = document.createElement('div');
+                div.className = `park-item ${!parkData.enabled ? 'disabled' : ''}`;
+                div.onclick = () => togglePark(park);
+                div.innerHTML = `
+                    <span class="park-name">
+                        <span class="emoji">${parkEmojis[index % parkEmojis.length]}</span>
+                        ${park}
+                    </span>
+                    <input 
+                        type="number" 
+                        class="weight-input" 
+                        value="${parkData.weight}" 
+                        min="0" 
+                        max="100"
+                        onchange="updateWeight('${park}', this.value)"
+                        onclick="event.stopPropagation()"
+                        ${!parkData.enabled ? 'disabled' : ''}
+                    >
+                    <div class="status-indicator"></div>
+                `;
+                container.appendChild(div);
+            });
+            
+            updateTotalWeight();
+        }
+
+        function togglePark(parkName) {
+            parks[parkName].enabled = !parks[parkName].enabled;
+            renderParksList();
+        }
+
+        function updateWeight(parkName, newWeight) {
+            const weight = parseInt(newWeight) || 0;
+            parks[parkName].weight = Math.max(0, Math.min(100, weight));
+            updateTotalWeight();
+        }
+
+        function updateTotalWeight() {
+            const total = Object.values(parks)
+                .filter(park => park.enabled)
+                .reduce((sum, park) => sum + park.weight, 0);
+            document.getElementById('totalWeight').textContent = total;
+        }
+
+        function pickRandomPark() {
+            const enabledParks = Object.entries(parks).filter(([name, data]) => data.enabled);
+            const totalWeight = enabledParks.reduce((sum, [name, data]) => sum + data.weight, 0);
+            
+            if (totalWeight === 0 || enabledParks.length === 0) {
+                showResult("Please enable some parks and set weights! 🎯");
+                return;
+            }
+            
+            let random = Math.random() * totalWeight;
+            
+            for (const [park, data] of enabledParks) {
+                if (random < data.weight) {
+                    const parkIndex = Object.keys(parks).indexOf(park);
+                    const emoji = parkEmojis[parkIndex % parkEmojis.length];
+                    showResult(`${emoji} ${park}!`);
+                    return;
+                }
+                random -= data.weight;
+            }
+        }
+
+        function showResult(text) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.textContent = text;
+            resultDiv.classList.remove('show');
+            
+            // Small delay to trigger animation
+            setTimeout(() => {
+                resultDiv.classList.add('show');
+            }, 50);
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            renderParksList();
+            showResult("Click the button to pick a park! 🎯");
+        });
+    </script>
+</body>
+</html>
