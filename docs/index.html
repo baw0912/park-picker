@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Park Picker</title>
+    <title>PPRC Park Picker</title>
     <style>
         * {
             margin: 0;
@@ -13,24 +13,24 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #f8f9fa;
             min-height: 100vh;
             padding: 20px;
-            color: #333;
+            color: #2c2c2c;
         }
 
         .container {
             max-width: 500px;
             margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(10px);
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e9ecef;
             overflow: hidden;
         }
 
         .header {
-            background: linear-gradient(135deg, #4CAF50, #45a049);
+            background: #2c2c2c;
             padding: 30px 20px;
             text-align: center;
             color: white;
@@ -39,12 +39,13 @@
         .header h1 {
             font-size: 2.2em;
             margin-bottom: 10px;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            font-weight: 600;
         }
 
         .header p {
-            opacity: 0.9;
+            opacity: 0.8;
             font-size: 1.1em;
+            font-weight: 400;
         }
 
         .content {
@@ -57,23 +58,24 @@
         }
 
         .pick-button {
-            background: linear-gradient(135deg, #FF6B6B, #FF8E8E);
+            background: #2c2c2c;
             color: white;
             border: none;
             padding: 18px 40px;
-            border-radius: 50px;
+            border-radius: 12px;
             font-size: 1.3em;
-            font-weight: bold;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
+            box-shadow: 0 4px 12px rgba(44, 44, 44, 0.15);
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
         }
 
         .pick-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 35px rgba(255, 107, 107, 0.4);
+            background: #1a1a1a;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(44, 44, 44, 0.25);
         }
 
         .pick-button:active {
@@ -83,18 +85,19 @@
         .result {
             margin-top: 25px;
             padding: 20px;
-            background: linear-gradient(135deg, #FFE066, #FF9A9E);
-            border-radius: 15px;
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
             font-size: 1.4em;
-            font-weight: bold;
+            font-weight: 600;
             text-align: center;
             min-height: 60px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 8px 25px rgba(255, 224, 102, 0.3);
+            color: #2c2c2c;
             opacity: 0;
-            transform: scale(0.8);
+            transform: scale(0.95);
             transition: all 0.5s ease;
         }
 
@@ -110,9 +113,9 @@
         .section-title {
             font-size: 1.5em;
             margin-bottom: 20px;
-            color: #333;
+            color: #2c2c2c;
             text-align: center;
-            font-weight: bold;
+            font-weight: 600;
         }
 
         .park-item {
@@ -121,47 +124,49 @@
             justify-content: space-between;
             padding: 15px;
             margin-bottom: 12px;
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            background: #ffffff;
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
             transition: all 0.3s ease;
             cursor: pointer;
             position: relative;
         }
 
         .park-item:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border-color: #dee2e6;
         }
 
         .park-item.disabled {
             opacity: 0.5;
-            background: rgba(200, 200, 200, 0.6);
+            background: #f8f9fa;
+            border-color: #e9ecef;
         }
 
         .park-item.disabled .park-name {
             text-decoration: line-through;
-            color: #888;
+            color: #6c757d;
         }
 
         .status-indicator {
             position: absolute;
             top: 8px;
             right: 8px;
-            width: 12px;
-            height: 12px;
+            width: 10px;
+            height: 10px;
             border-radius: 50%;
-            background: #4CAF50;
+            background: #28a745;
             transition: all 0.3s ease;
         }
 
         .park-item.disabled .status-indicator {
-            background: #f44336;
+            background: #dc3545;
         }
 
         .park-name {
-            font-weight: 600;
-            color: #333;
+            font-weight: 500;
+            color: #2c2c2c;
             flex: 1;
             font-size: 1.1em;
         }
@@ -169,37 +174,42 @@
         .weight-input {
             width: 80px;
             padding: 8px 12px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
             text-align: center;
             font-size: 1em;
-            font-weight: bold;
+            font-weight: 500;
             transition: all 0.3s ease;
+            background: #ffffff;
         }
 
         .weight-input:focus {
             outline: none;
-            border-color: #4CAF50;
-            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+            border-color: #2c2c2c;
+            box-shadow: 0 0 0 2px rgba(44, 44, 44, 0.1);
         }
 
         .stats {
             margin-top: 25px;
             padding: 20px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border-radius: 15px;
-            color: white;
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 12px;
+            color: #2c2c2c;
             text-align: center;
         }
 
         .stats h3 {
             margin-bottom: 10px;
             font-size: 1.2em;
+            font-weight: 500;
+            color: #495057;
         }
 
         .total-weight {
             font-size: 1.5em;
-            font-weight: bold;
+            font-weight: 600;
+            color: #2c2c2c;
         }
 
         @media (max-width: 480px) {
@@ -238,7 +248,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🏞️ Park Picker</h1>
+            <h1>🏞️ PPRC Park Picker</h1>
             <p>Discover your next adventure!</p>
         </div>
         
