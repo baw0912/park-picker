@@ -88,10 +88,10 @@
             background: #f8f9fa;
             border: 2px solid #e9ecef;
             border-radius: 12px;
-            font-size: 1.4em;
+            font-size: 1.3em;
             font-weight: 600;
             text-align: center;
-            min-height: 60px;
+            min-height: 120px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -99,6 +99,8 @@
             opacity: 0;
             transform: scale(0.95);
             transition: all 0.5s ease;
+            white-space: pre-line;
+            line-height: 1.5;
         }
 
         .result.show {
@@ -367,7 +369,19 @@
                 if (random < data.weight) {
                     const parkIndex = Object.keys(parks).indexOf(park);
                     const emoji = parkEmojis[parkIndex % parkEmojis.length];
-                    showResult(`${emoji} ${park}!`);
+                    
+                    // Randomly pick direction
+                    const direction = Math.random() < 0.5 ? "clockwise" : "counter-clockwise";
+                    const directionEmoji = direction === "clockwise" ? "↻" : "↺";
+                    
+                    // Randomly pick colors
+                    const shirtColors = ["red", "black", "blue", "green", "yellow", "white", "pink", "grey"];
+                    const pantsColors = ["black", "blue", "green"];
+                    
+                    const shirtColor = shirtColors[Math.floor(Math.random() * shirtColors.length)];
+                    const pantsColor = pantsColors[Math.floor(Math.random() * pantsColors.length)];
+                    
+                    showResult(`${emoji} ${park}\n${directionEmoji} ${direction}\n👕 ${shirtColor} shirt\n👖 ${pantsColor} pants`);
                     return;
                 }
                 random -= data.weight;
